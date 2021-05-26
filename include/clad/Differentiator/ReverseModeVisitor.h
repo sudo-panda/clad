@@ -45,19 +45,13 @@ namespace clad {
     unsigned outputArrayCursor = 0;
     unsigned numParams = 0;
     bool isVectorValued = false;
+    unsigned arrLen = 10;
 
     const char* funcPostfix() const {
       if (isVectorValued)
         return "_jac";
       else
         return "_grad";
-    }
-
-    const char* resultArg() const {
-      if (isVectorValued)
-        return "jacobianMatrix";
-      else
-        return "_result";
     }
 
     /// Removes the local as well as non-local const qualifiers from a QualType
