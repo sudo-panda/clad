@@ -280,6 +280,11 @@ namespace clad {
     using type = Drop_t<N, Args...>;
   };
 
+  template <std::size_t N, typename R, typename... Args>
+  struct DropArgs<N, R (*)(Args..., ...)> {
+    using type = Drop_t<N, Args...>;
+  };
+
   /// These macro expansions are used to cover all possible cases of
   /// qualifiers in member functions when declaring DropArgs. They need to be
   /// read from the bottom to the top. Starting from the use of AddCON,
@@ -291,7 +296,7 @@ namespace clad {
   /// function with all the cases
 #define DropArgs_AddSPECS(var, con, vol, ref, noex)                            \
   template <std::size_t N, typename R, typename C, typename... Args>           \
-  struct DropArgs<N, R (C::*)(Args...) con vol ref noex> {                     \
+  struct DropArgs<N, R (C::*)(Args... REM_CTOR var) con vol ref noex> {        \
     using type = Drop_t<N, Args...>;                                           \
   };
 
@@ -313,7 +318,8 @@ namespace clad {
 
 #define DropArgs_AddCON(var) DropArgs_AddVOL(var, ) DropArgs_AddVOL(var, const)
 
-  DropArgs_AddCON(()) // Declares all the specializations
+  DropArgs_AddCON(())
+      DropArgs_AddCON((, ...)) // Declares all the specializations
 
       template <class T, class R>
       struct OutputParamType {
