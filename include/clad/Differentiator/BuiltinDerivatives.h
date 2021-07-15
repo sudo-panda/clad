@@ -102,8 +102,8 @@ namespace custom_derivatives {
                                  T2 exponent,
                                  clad::array_ref<decltype(pow(T1(), T2()))> _d_x,
                                  clad::array_ref<decltype(pow(T1(), T2()))> _d_y) {
-    * _d_x += pow_darg0(x, exponent);
-    * _d_y += pow_darg1(x, exponent);
+    *_d_x += pow_darg0(x, exponent);
+    *_d_y += pow_darg1(x, exponent);
   }
 
   template <typename T>
