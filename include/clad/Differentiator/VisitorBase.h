@@ -369,6 +369,11 @@ namespace clad {
     clang::TemplateDecl* GetCladArrayDecl();
     /// Create clad::array<T> type.
     clang::QualType GetCladArrayOfType(clang::QualType T);
+    clang::Expr*
+    /// Creates the expression Base.slice(Args) for the given Base expr and Args
+    /// array. The Base expr must be of clad::array_ref<T> type
+    GetArrayRefSliceExpr(clang::Expr* Base,
+                         llvm::MutableArrayRef<clang::Expr*> Args);
   };
 } // end namespace clad
 

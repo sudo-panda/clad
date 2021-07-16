@@ -707,6 +707,25 @@ namespace clad {
             .get();
   }
 
+  Expr* VisitorBase::GetArrayRefSliceExpr(Expr* Base,
+                                          MutableArrayRef<Expr*> Args) {
+    UnqualifiedId Member;
+    Member.setIdentifier(&m_Context.Idents.get("slice"), noLoc);
+    CXXScopeSpec SS;
+    auto ME = m_Sema
+                  .ActOnMemberAccessExpr(getCurrentScope(),
+                                         Base,
+                                         noLoc,
+                                         tok::TokenKind::period,
+                                         SS,
+                                         noLoc,
+                                         Member,
+                               nullptr)
+        .get();
+    return m_Sema.ActOnCallExpr(getCurrentScope(), ME, noLoc, Args, noLoc)
+        .get();
+  }
+
   bool VisitorBase::isArrayRefType(QualType QT) {
     return QT.getAsString().find("clad::array_ref") != std::string::npos;
   }
